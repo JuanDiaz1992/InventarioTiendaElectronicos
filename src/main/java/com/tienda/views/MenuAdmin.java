@@ -1,4 +1,4 @@
-package com.tienda.menu;
+package com.tienda.views;
 
 import com.tienda.models.Usuario;
 

@@ -1,15 +1,15 @@
 package com.tienda;
 
-import com.tienda.menu.MenuAdmin;
-import com.tienda.menu.MenuGerente;
-import com.tienda.menu.MenuVendedor;
+import com.tienda.controllers.UsersController;
 import com.tienda.models.Usuario;
-import com.tienda.services.UserServices;
+import com.tienda.views.MenuAdmin;
+import com.tienda.views.MenuGerente;
+import com.tienda.views.MenuVendedor;
 
 import java.util.Scanner;
 
 
-public class Main {
+public class Index {
     public static void main(String[] args){
 
         //Usuario usuarioNew = new Usuario("Admin","123456789",1);
@@ -27,12 +27,7 @@ public class Main {
             option = scanner.nextLine();
             switch (option){
                 case "1":
-                    System.out.print("Ingrese su usuario: ");
-                    String nombreUsuario = scanner.nextLine();
-                    System.out.print("Ingrese su contraseña: ");
-                    String password = scanner.nextLine();
-                    System.out.println("Validando credenciales...");
-                    Usuario usuario = UserServices.loginService(nombreUsuario,password);
+                    Usuario usuario = UsersController.login();
                     if (usuario!= null){
                         System.out.println("");
                         System.out.println("***********Bienvenido "+ usuario.getNombre()+" ***********");

@@ -26,9 +26,7 @@ public class UserServices {
                     return usuarioResult = usuario;
                 }
             }
-
             conexion.commit();
-            System.out.println("Se hizo commit de la transacción.");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -54,7 +52,6 @@ public class UserServices {
                 result = usuarioDAO.insert(usuario);
             }
             conexion.commit();
-            System.out.println("Se hizo commit de la transacción.");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -79,7 +76,6 @@ public class UserServices {
                 result = usuarioDAO.update(usuario);
             }
             conexion.commit();
-            System.out.println("Se hizo commit de la transacción.");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
