@@ -5,8 +5,9 @@ import com.tienda.models.Usuario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
-import static com.tienda.datos.MySql.getConection;
+import static com.tienda.datos.SqlLite.getConection;
 
 public class UserServices {
 
@@ -52,6 +53,7 @@ public class UserServices {
                 result = usuarioDAO.insert(usuario);
             }
             conexion.commit();
+            System.out.println("Usuario creado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -72,10 +74,9 @@ public class UserServices {
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            if (usuarioDAO.getFromName(usuario.getNombre()) != null){
-                result = usuarioDAO.update(usuario);
-            }
+            result = usuarioDAO.update(usuario);
             conexion.commit();
+            System.out.println("Usuario modificado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -86,6 +87,94 @@ public class UserServices {
             }
         }
         return result;
+    }
+
+    public static Usuario getUser(String nombre){
+        Connection conexion = null;
+        Usuario usuarioResult = null;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            usuarioResult = usuarioDAO.getFromName(nombre);
+            conexion.commit();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return usuarioResult;
+    }
+
+    public static Usuario getUser(int id){
+        Connection conexion = null;
+        Usuario usuarioResult = null;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            usuarioResult = usuarioDAO.get(id);
+            conexion.commit();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return usuarioResult;
+    }
+
+    public static List<Usuario> getAllUsers(){
+        Connection conexion = null;
+        List <Usuario> usuarios = null;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            usuarios = usuarioDAO.select();
+            conexion.commit();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return usuarios;
+    }
+
+    public static void delteteUser(Usuario usuarioDelte){
+        Connection conexion = null;
+        int usuario = 0;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            usuario = usuarioDAO.delete(usuarioDelte);
+            conexion.commit();
+            System.out.println("Usuario eliminado correctamente");
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
     }
 
 }

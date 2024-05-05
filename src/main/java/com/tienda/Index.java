@@ -2,6 +2,7 @@ package com.tienda;
 
 import com.tienda.controllers.UsersController;
 import com.tienda.models.Usuario;
+import com.tienda.services.UserServices;
 import com.tienda.views.MenuAdmin;
 import com.tienda.views.MenuGerente;
 import com.tienda.views.MenuVendedor;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class Index {
     public static void main(String[] args){
 
-        //Usuario usuarioNew = new Usuario("Admin","123456789",1);
+        //Usuario usuarioNew = new Usuario("gerente1","123456789",3);
         //UserServices.createUserService(usuarioNew);
         //Descomente las anteriores lineas solo para crear el usuario Admin en la base de datos
 

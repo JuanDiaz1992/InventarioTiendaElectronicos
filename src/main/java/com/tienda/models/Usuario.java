@@ -1,4 +1,7 @@
 package com.tienda.models;
+
+import java.util.Objects;
+
 public class Usuario{
     private int idUsuario;
     private String nombre;
@@ -53,13 +56,23 @@ public class Usuario{
     }
 
     @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Usuario usuario)) return false;
+        return getIdUsuario() == usuario.getIdUsuario() && getRol() == usuario.getRol() && Objects.equals(getNombre(), usuario.getNombre()) && Objects.equals(getPassword(), usuario.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdUsuario(), getNombre(), getPassword(), getRol());
+    }
+
+    @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Usuario{");
-        sb.append("idUsuario=").append(idUsuario);
-        sb.append(", nombre='").append(nombre).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", rol=").append(rol);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(idUsuario);
+        sb.append(", ").append(nombre);
+        sb.append(", ").append(rol);
         return sb.toString();
     }
 }

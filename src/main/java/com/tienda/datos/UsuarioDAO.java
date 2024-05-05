@@ -9,13 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tienda.datos.MySql.close;
-import static com.tienda.datos.MySql.getConection;
+import static com.tienda.datos.SqlLite.close;
+import static com.tienda.datos.SqlLite.getConection;
 
 public class UsuarioDAO implements CRUD<Usuario>{
     private static final String SQL_SELECT = "SELECT id_usuario, nombre, password, rol FROM usuario";
     private static final String SQL_INSERT = "INSERT INTO usuario (nombre, password, rol) VALUES(?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE ?";
+    private static final String SQL_UPDATE = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE id_usuario = ?";
     private static final String SQL_DELETE = "DELETE FROM usuario WHERE id_usuario = ?";
     private static final String SQL_SELECTFROMID = "SELECT id_usuario, nombre, password, rol FROM usuario WHERE id_usuario = ?";
     private static final String SQL_SELECTFROMNAME = "SELECT id_usuario, nombre, password, rol FROM usuario WHERE nombre = ?";
@@ -141,6 +141,7 @@ public class UsuarioDAO implements CRUD<Usuario>{
         ResultSet rs = null;
         Usuario usuario = null;
         try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
             stmt = conn.prepareStatement(SQL_SELECTFROMID);
             stmt.setInt(1, idUSuario);
             rs = stmt.executeQuery();
@@ -153,10 +154,14 @@ public class UsuarioDAO implements CRUD<Usuario>{
             }
         }finally {
             try {
-                close(rs);
-                close(stmt);
+                if (rs != null) {
+                    close(rs);
+                    close(stmt);
+                }
                 if (this.conexionTransaccional == null){
-                    close(conn);
+                    if (rs != null) {
+                        close(conn);
+                    }
                 }
 
             } catch (SQLException e) {
