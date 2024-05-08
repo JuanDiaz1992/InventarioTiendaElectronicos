@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static com.tienda.datos.conections.SqlLite.close;
 import static com.tienda.datos.conections.SqlLite.getConection;
 
-public class VentaDAO implements CRUD<Venta>{
+public class VentaDAO implements ICRUD<Venta> {
     private static final String SQL_SELECT = "SELECT id_venta, productos, total_venta, fecha FROM venta";
     private static final String SQL_INSERT = "INSERT INTO venta (productos, total_venta, fecha) VALUES(?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE venta SET nombre=?, descripcion=?, rol=?, stock =? WHERE ?";

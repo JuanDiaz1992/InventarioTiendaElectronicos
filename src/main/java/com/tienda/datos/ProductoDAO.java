@@ -13,7 +13,7 @@ import java.util.List;
 import static com.tienda.datos.conections.SqlLite.close;
 import static com.tienda.datos.conections.SqlLite.getConection;
 
-public class ProductoDAO implements CRUD<Producto>{
+public class ProductoDAO implements ICRUD<Producto> {
     private static final String SQL_SELECT = "SELECT id_producto, nombre, descripcion, precio, stock FROM producto";
     private static final String SQL_INSERT = "INSERT INTO producto (nombre, descripcion, precio, stock) VALUES(?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE producto SET nombre=?, descripcion=?, precio=?, stock =? WHERE id_producto = ?";

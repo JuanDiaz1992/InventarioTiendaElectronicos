@@ -12,7 +12,7 @@ import java.util.List;
 import static com.tienda.datos.conections.SqlLite.close;
 import static com.tienda.datos.conections.SqlLite.getConection;
 
-public class UsuarioDAO implements CRUD<Usuario>{
+public class UsuarioDAO implements ICRUD<Usuario> {
     private static final String SQL_SELECT = "SELECT id_usuario, nombre, password, rol FROM usuario";
     private static final String SQL_INSERT = "INSERT INTO usuario (nombre, password, rol) VALUES(?,?,?)";
     private static final String SQL_UPDATE = "UPDATE usuario SET nombre=?, password=?, rol=? WHERE id_usuario = ?";
