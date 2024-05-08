@@ -1,8 +1,8 @@
 package com.tienda.services;
 
-import com.tienda.datos.UsuarioDAO;
-import com.tienda.models.Usuario;
-import com.tienda.utils.EncryptPassword;
+import com.tienda.datos.ProductoDAO;
+import com.tienda.models.Producto;
+
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,38 +10,11 @@ import java.util.List;
 
 import static com.tienda.datos.SqlLite.getConection;
 
-public class UserServices {
+public class ProductsServices {
 
-    static UsuarioDAO usuarioDAO = new UsuarioDAO();
+    static ProductoDAO productoDAO = new ProductoDAO();
 
-    public static Usuario loginService(String nombre, String password){
-        Connection conexion = null;
-        Usuario usuarioResult = null;
-        try {
-            conexion = getConection();
-            if (conexion.getAutoCommit()){
-                conexion.setAutoCommit(false);
-            }
-            Usuario usuario = usuarioDAO.getFromName(nombre);
-            if (usuario != null){
-                if (EncryptPassword.validatePassword(password, usuario.getPassword())){
-                    return usuarioResult = usuario;
-                }
-            }
-            conexion.commit();
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
-            System.out.println("Entramos al rollback");
-            try {
-                conexion.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return usuarioResult;
-    }
-
-    public static int createUserService (Usuario usuario){
+    public static int createProductService (Producto producto){
         Connection conexion = null;
         int result = 0;
         try {
@@ -49,12 +22,9 @@ public class UserServices {
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            if (usuarioDAO.getFromName(usuario.getNombre()) == null){
-                usuario.setPassword(EncryptPassword.hashPassword(usuario.getPassword()));
-                result = usuarioDAO.insert(usuario);
-            }
+            result = productoDAO.insert(producto);
             conexion.commit();
-            System.out.println("Usuario creado correctamente");
+            System.out.println("Producto "+producto.getNombre()+" creado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -67,7 +37,7 @@ public class UserServices {
         return result;
     }
 
-    public static int updateUserService(Usuario usuario){
+    public static int updateProductService(Producto producto){
         Connection conexion = null;
         int result = 0;
         try {
@@ -75,9 +45,9 @@ public class UserServices {
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            result = usuarioDAO.update(usuario);
+            result = productoDAO.update(producto);
             conexion.commit();
-            System.out.println("Usuario modificado correctamente");
+            System.out.println("Producto "+producto.getNombre()+" modificado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -90,15 +60,15 @@ public class UserServices {
         return result;
     }
 
-    public static Usuario getUser(String nombre){
+    public static Producto getProduct(String nombre){
         Connection conexion = null;
-        Usuario usuarioResult = null;
+        Producto producto = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            usuarioResult = usuarioDAO.getFromName(nombre);
+            producto = productoDAO.getFromName(nombre);
             conexion.commit();
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -109,18 +79,18 @@ public class UserServices {
                 ex.printStackTrace(System.out);
             }
         }
-        return usuarioResult;
+        return producto;
     }
 
-    public static Usuario getUser(int id){
+    public static Producto getProduct(int id){
         Connection conexion = null;
-        Usuario usuarioResult = null;
+        Producto producto = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            usuarioResult = usuarioDAO.get(id);
+            producto = productoDAO.get(id);
             conexion.commit();
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -131,18 +101,18 @@ public class UserServices {
                 ex.printStackTrace(System.out);
             }
         }
-        return usuarioResult;
+        return producto;
     }
 
-    public static List<Usuario> getAllUsers(){
+    public static List<Producto> getAllProducts(){
         Connection conexion = null;
-        List <Usuario> usuarios = null;
+        List <Producto> productos = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            usuarios = usuarioDAO.select();
+            productos = productoDAO.select();
             conexion.commit();
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -153,20 +123,19 @@ public class UserServices {
                 ex.printStackTrace(System.out);
             }
         }
-        return usuarios;
+        return productos;
     }
 
-    public static void delteteUser(Usuario usuarioDelte){
+    public static void delteteProduct(Producto producto){
         Connection conexion = null;
-        int usuario = 0;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            usuario = usuarioDAO.delete(usuarioDelte);
+            productoDAO.delete(producto);
             conexion.commit();
-            System.out.println("Usuario eliminado correctamente");
+            System.out.println("Producto "+producto.getNombre()+" eliminado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");

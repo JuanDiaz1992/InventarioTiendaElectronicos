@@ -1,4 +1,4 @@
-package com.tienda.services;
+package com.tienda.utils;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class EncryptPassword {

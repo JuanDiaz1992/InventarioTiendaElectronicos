@@ -4,10 +4,10 @@ public class Producto {
     private int idProducto;
     private String nombre;
     private String descripcion;
-    private double precio;
+    private int precio;
     private int stock;
 
-    public Producto(int idProducto, String nombre, String descripcion, double precio, int stock) {
+    public Producto(int idProducto, String nombre, String descripcion, int precio, int stock) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -19,7 +19,7 @@ public class Producto {
         this.idProducto = idProducto;
     }
 
-    public Producto(String nombre, String descripcion ,double precio,int stock) {
+    public Producto(String nombre, String descripcion ,int precio,int stock) {
         this.stock = stock;
         this.precio = precio;
         this.nombre = nombre;
@@ -40,11 +40,11 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(int precio) {
         this.precio = precio;
     }
 
@@ -67,13 +67,14 @@ public class Producto {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Producto{");
-        sb.append("idProducto=").append(idProducto);
-        sb.append(", nombre='").append(nombre).append('\'');
-        sb.append(", descripcion='").append(descripcion).append('\'');
-        sb.append(", precio=").append(precio);
-        sb.append(", stock=").append(stock);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(idProducto);
+        String nombreRecortado =  nombre.length() > 12 ? nombre.substring(0, 12) + "..." : nombre;
+        sb.append(", ").append(nombreRecortado);
+        String textoAcortado =  descripcion.length() > 12 ? descripcion.substring(0, 12) + "..." : descripcion;
+        sb.append(", ").append(textoAcortado);
+        sb.append(", ").append(precio);
+        sb.append(", ").append(stock);
         return sb.toString();
     }
 }

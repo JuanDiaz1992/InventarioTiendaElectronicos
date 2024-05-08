@@ -1,7 +1,7 @@
 package com.tienda.controllers;
 
 import com.tienda.models.Usuario;
-import com.tienda.services.EncryptPassword;
+import com.tienda.utils.EncryptPassword;
 import com.tienda.services.UserServices;
 import com.tienda.utils.CreateTable;
 
@@ -149,6 +149,8 @@ public class UsersController {
             String optionDelete = scanner.nextLine();
             if (optionDelete.equals("1")){
                 UserServices.delteteUser(usuarioObtenido);
+            }else {
+                System.out.println("Operación cancelada");
             }
         }
     }
