@@ -34,7 +34,7 @@ public class Index {
                 case "1":
                     Usuario usuario = UsersController.login();
                     if (usuario!= null){
-                        System.out.println("");
+                        System.out.println();
                         System.out.println("***********Bienvenido "+ usuario.getNombre()+" ***********");
                         switch (usuario.getRol()){
                             case 1:

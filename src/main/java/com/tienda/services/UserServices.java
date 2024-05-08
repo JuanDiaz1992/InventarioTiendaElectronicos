@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.tienda.datos.SqlLite.getConection;
+import static com.tienda.datos.conections.SqlLite.getConection;
 
 public class UserServices {
 

@@ -1,4 +1,4 @@
-package com.tienda.datos;
+package com.tienda.datos.conections;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 

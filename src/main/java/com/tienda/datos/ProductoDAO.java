@@ -1,7 +1,7 @@
 package com.tienda.datos;
 
+import com.tienda.datos.conections.SqlLite;
 import com.tienda.models.Producto;
-import com.tienda.models.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tienda.datos.SqlLite.close;
-import static com.tienda.datos.SqlLite.getConection;
+import static com.tienda.datos.conections.SqlLite.close;
+import static com.tienda.datos.conections.SqlLite.getConection;
 
 public class ProductoDAO implements CRUD<Producto>{
     private static final String SQL_SELECT = "SELECT id_producto, nombre, descripcion, precio, stock FROM producto";

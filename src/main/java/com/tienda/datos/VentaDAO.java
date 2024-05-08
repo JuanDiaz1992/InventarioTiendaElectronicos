@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.tienda.datos.SqlLite.close;
-import static com.tienda.datos.SqlLite.getConection;
+import static com.tienda.datos.conections.SqlLite.close;
+import static com.tienda.datos.conections.SqlLite.getConection;
 
 public class VentaDAO implements CRUD<Venta>{
     private static final String SQL_SELECT = "SELECT id_venta, productos, total_venta, fecha FROM venta";

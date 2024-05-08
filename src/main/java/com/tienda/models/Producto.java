@@ -48,7 +48,6 @@ public class Producto {
         this.precio = precio;
     }
 
-
     public String getDescripcion() {
         return descripcion;
     }

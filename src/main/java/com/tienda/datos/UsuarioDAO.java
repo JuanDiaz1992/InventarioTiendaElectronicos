@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tienda.datos.SqlLite.close;
-import static com.tienda.datos.SqlLite.getConection;
+import static com.tienda.datos.conections.SqlLite.close;
+import static com.tienda.datos.conections.SqlLite.getConection;
 
 public class UsuarioDAO implements CRUD<Usuario>{
     private static final String SQL_SELECT = "SELECT id_usuario, nombre, password, rol FROM usuario";
