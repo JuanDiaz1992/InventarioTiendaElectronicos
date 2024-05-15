@@ -2,6 +2,7 @@ package com.tienda.views;
 
 import com.tienda.controllers.ProductosController;
 import com.tienda.models.Usuario;
+import com.tienda.views.subMenus.MenuVentas;
 
 import java.util.Scanner;
 
@@ -20,6 +21,9 @@ public class MenuVendedor {
                 case "1":
                     ProductosController.listProductsController();
                     ProductosController.viewProduct();
+                    break;
+                case "2":
+                    MenuVentas.makeSale(usuario);
                     break;
                 case "0":
                     System.out.println("Sesión finalizada.");

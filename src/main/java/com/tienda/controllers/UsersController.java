@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class UsersController {
     private static  Scanner scanner = new Scanner(System.in);
 
-
     public static Usuario login(){
         System.out.print("Ingrese su usuario: ");
         String nombreUsuario = scanner.nextLine();

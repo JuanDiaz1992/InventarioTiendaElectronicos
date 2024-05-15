@@ -5,13 +5,11 @@ import java.util.List;
 
 public class Venta {
     private int idVenta;
-    private List<Producto> productos;
     private double totalVenta;
-    private Date fecha;
+    private String fecha;
 
-    public Venta(int idVenta, List<Producto> productos, double totalVenta, Date fecha) {
+    public Venta(int idVenta, double totalVenta, String fecha) {
         this.idVenta = idVenta;
-        this.productos = productos;
         this.totalVenta = totalVenta;
         this.fecha = fecha;
     }
@@ -20,24 +18,15 @@ public class Venta {
         this.idVenta = idVenta;
     }
 
-    public Venta(Date fecha, double totalVenta, List<Producto> productos) {
+    public Venta(String fecha, double totalVenta) {
         this.fecha = fecha;
         this.totalVenta = totalVenta;
-        this.productos = productos;
     }
 
     public Venta() {}
 
     public int getIdVenta() {
         return idVenta;
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
     }
 
     public double getTotalVenta() {
@@ -48,11 +37,11 @@ public class Venta {
         this.totalVenta = totalVenta;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -60,7 +49,6 @@ public class Venta {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Venta{");
         sb.append("idVenta=").append(idVenta);
-        sb.append(", productos=").append(productos);
         sb.append(", totalVenta=").append(totalVenta);
         sb.append(", fecha=").append(fecha);
         sb.append('}');

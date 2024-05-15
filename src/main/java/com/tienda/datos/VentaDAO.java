@@ -19,7 +19,7 @@ import static com.tienda.datos.conections.SqlLite.getConection;
 public class VentaDAO implements ICRUD<Venta> {
     private static final String SQL_SELECT = "SELECT id_venta, productos, total_venta, fecha FROM venta";
     private static final String SQL_INSERT = "INSERT INTO venta (productos, total_venta, fecha) VALUES(?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE venta SET nombre=?, descripcion=?, rol=?, stock =? WHERE ?";
+    private static final String SQL_UPDATE = "UPDATE venta SET nombre=?, descripcion=?, rol=?, stock =? WHERE id_venta = ?";
     private static final String SQL_DELETE = "DELETE FROM venta WHERE id_venta = ?";
     private static final String SQL_SELECTFROMID = "SELECT id_venta, productos, total_venta, fecha FROM venta WHERE id_venta = ?";
 
@@ -28,177 +28,206 @@ public class VentaDAO implements ICRUD<Venta> {
     public VentaDAO(Connection connection){
         this.conexionTransaccional = connection;
     }
+
     @Override
     public List<Venta> select() throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Venta venta = null;
-        List<Venta> ventas = new ArrayList<>();
-        try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
-            stmt = conn.prepareStatement(SQL_SELECT);
-            rs = stmt.executeQuery();
-            while (rs.next()){
-                int idVenta = rs.getInt("id_venta");
-                String productos = rs.getString("productos");
-                double totalVenta = rs.getDouble("total_venta");
-                Date fecha = rs.getDate("fecha");
-                List<Integer> listaProductos = Arrays.stream(productos.split(",\\s*"))
-                                                                    .map(Integer::parseInt)
-                                                                    .collect(Collectors.toList());
-                List<Producto> productosLista = new ArrayList<>();
-                ProductoDAO productoDAO = new ProductoDAO();
-                for (Integer idProductos: listaProductos){
-                    Producto producto = productoDAO.get(idProductos);
-                    if (producto.getIdProducto() != 0){
-                        productosLista.add(producto);
-                    }
-                }
-                venta = new Venta(idVenta,productosLista,totalVenta,fecha);
-                ventas.add(venta);
-            }
-        }finally {
-            try {
-                close(rs);
-                close(stmt);
-                if (this.conexionTransaccional == null){
-                    close(conn);
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return ventas;
+        return List.of();
     }
 
     @Override
-    public int insert(Venta venta) throws SQLException {
-        Connection conn = null;
-        PreparedStatement  stmt = null;
-        int registros = 0;
-        try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
-            stmt = conn.prepareStatement(SQL_INSERT);
-            List<String> idProductos = new ArrayList<>();
-            for (Producto producto: venta.getProductos()){
-                idProductos.add(Integer.toString(producto.getIdProducto()));
-            }
-            String listaComoString = String.join(", ", idProductos);
-
-            stmt.setString(1,listaComoString);
-            stmt.setDouble(2,venta.getTotalVenta());
-            stmt.setDate(3, (java.sql.Date) venta.getFecha());
-            registros = stmt.executeUpdate();
-        }finally {
-            try {
-                close(stmt);
-                if (this.conexionTransaccional == null){
-                    close(conn);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return registros;
+    public int insert(Venta object) throws SQLException {
+        return 0;
     }
 
     @Override
-    public int update(Venta venta) throws SQLException {
-        Connection conn = null;
-        PreparedStatement  stmt = null;
-        int registros = 0;
-        try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
-            stmt = conn.prepareStatement(SQL_UPDATE);
-            List<String> idProductos = new ArrayList<>();
-            for (Producto producto: venta.getProductos()){
-                idProductos.add(Integer.toString(producto.getIdProducto()));
-            }
-            String listaComoString = String.join(", ", idProductos);
-
-            stmt.setString(1,listaComoString);
-            stmt.setDouble(2,venta.getTotalVenta());
-            stmt.setDate(3, (java.sql.Date) venta.getFecha());
-            stmt.setInt(3, venta.getIdVenta());
-            registros = stmt.executeUpdate();
-        }finally {
-            try {
-                close(stmt);
-                if (this.conexionTransaccional == null){
-                    close(conn);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return registros;
+    public int update(Venta object) throws SQLException {
+        return 0;
     }
 
     @Override
-    public int delete(Venta venta) throws SQLException {
-        Connection conn = null;
-        PreparedStatement  stmt = null;
-        int registros = 0;
-        try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
-            stmt = conn.prepareStatement(SQL_DELETE);
-            stmt.setInt(1, venta.getIdVenta());
-            registros = stmt.executeUpdate();
-        }finally {
-            try {
-                close(stmt);
-                if (this.conexionTransaccional == null){
-                    close(conn);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return registros;
+    public int delete(Venta object) throws SQLException {
+        return 0;
     }
 
     @Override
-    public Venta get(int idVenta) throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Venta venta = null;
-        try {
-            stmt = conn.prepareStatement(SQL_SELECTFROMID);
-            stmt.setInt(1, idVenta);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id_venta");
-                String productos = rs.getString("productos");
-                double totalVenta = rs.getDouble("total_venta");
-                Date fecha = rs.getDate("fecha");
-                List<Integer> listaProductos = Arrays.stream(productos.split(",\\s*"))
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
-                List<Producto> productosLista = new ArrayList<>();
-                ProductoDAO productoDAO = new ProductoDAO();
-                for (Integer idProductos: listaProductos){
-                    Producto producto = productoDAO.get(idProductos);
-                    if (producto != null){
-                        productosLista.add(producto);
-                    }
-                }
-                venta = new Venta(id,productosLista,totalVenta,fecha);
-            }
-        }finally {
-            try {
-                close(rs);
-                close(stmt);
-                if (this.conexionTransaccional == null){
-                    close(conn);
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-        return venta;
+    public Venta get(int id) throws SQLException {
+        return null;
     }
+
+
+//    @Override
+//    public List<Venta> select() throws SQLException {
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        ResultSet rs = null;
+//        Venta venta = null;
+//        List<Venta> ventas = new ArrayList<>();
+//        try {
+//            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+//            stmt = conn.prepareStatement(SQL_SELECT);
+//            rs = stmt.executeQuery();
+//            while (rs.next()){
+//                int idVenta = rs.getInt("id_venta");
+//                String productos = rs.getString("productos");
+//                double totalVenta = rs.getDouble("total_venta");
+//                Date fecha = rs.getDate("fecha");
+//                List<Integer> listaProductos = Arrays.stream(productos.split(",\\s*"))
+//                                                                    .map(Integer::parseInt)
+//                                                                    .collect(Collectors.toList());
+//                List<Producto> productosLista = new ArrayList<>();
+//                ProductoDAO productoDAO = new ProductoDAO();
+//                for (Integer idProductos: listaProductos){
+//                    Producto producto = productoDAO.get(idProductos);
+//                    if (producto.getIdProducto() != 0){
+//                        productosLista.add(producto);
+//                    }
+//                }
+//                venta = new Venta(idVenta,productosLista,totalVenta,fecha);
+//                ventas.add(venta);
+//            }
+//        }finally {
+//            try {
+//                close(rs);
+//                close(stmt);
+//                if (this.conexionTransaccional == null){
+//                    close(conn);
+//                }
+//
+//            } catch (SQLException e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return ventas;
+//    }
+//
+//    @Override
+//    public int insert(Venta venta) throws SQLException {
+//        Connection conn = null;
+//        PreparedStatement  stmt = null;
+//        int registros = 0;
+//        try {
+//            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+//            stmt = conn.prepareStatement(SQL_INSERT);
+//            List<String> idProductos = new ArrayList<>();
+//            for (Producto producto: venta.getProductos()){
+//                idProductos.add(Integer.toString(producto.getIdProducto()));
+//            }
+//            String listaComoString = String.join(", ", idProductos);
+//
+//            stmt.setString(1,listaComoString);
+//            stmt.setDouble(2,venta.getTotalVenta());
+//            stmt.setDate(3, (java.sql.Date) venta.getFecha());
+//            registros = stmt.executeUpdate();
+//        }finally {
+//            try {
+//                close(stmt);
+//                if (this.conexionTransaccional == null){
+//                    close(conn);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return registros;
+//    }
+//
+//    @Override
+//    public int update(Venta venta) throws SQLException {
+//        Connection conn = null;
+//        PreparedStatement  stmt = null;
+//        int registros = 0;
+//        try {
+//            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+//            stmt = conn.prepareStatement(SQL_UPDATE);
+//            List<String> idProductos = new ArrayList<>();
+//            for (Producto producto: venta.getProductos()){
+//                idProductos.add(Integer.toString(producto.getIdProducto()));
+//            }
+//            String listaComoString = String.join(", ", idProductos);
+//
+//            stmt.setString(1,listaComoString);
+//            stmt.setDouble(2,venta.getTotalVenta());
+//            stmt.setDate(3, (java.sql.Date) venta.getFecha());
+//            stmt.setInt(3, venta.getIdVenta());
+//            registros = stmt.executeUpdate();
+//        }finally {
+//            try {
+//                close(stmt);
+//                if (this.conexionTransaccional == null){
+//                    close(conn);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return registros;
+//    }
+//
+//    @Override
+//    public int delete(Venta venta) throws SQLException {
+//        Connection conn = null;
+//        PreparedStatement  stmt = null;
+//        int registros = 0;
+//        try {
+//            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+//            stmt = conn.prepareStatement(SQL_DELETE);
+//            stmt.setInt(1, venta.getIdVenta());
+//            registros = stmt.executeUpdate();
+//        }finally {
+//            try {
+//                close(stmt);
+//                if (this.conexionTransaccional == null){
+//                    close(conn);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return registros;
+//    }
+//
+//    @Override
+//    public Venta get(int idVenta) throws SQLException {
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        ResultSet rs = null;
+//        Venta venta = null;
+//        try {
+//            stmt = conn.prepareStatement(SQL_SELECTFROMID);
+//            stmt.setInt(1, idVenta);
+//            rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                int id = rs.getInt("id_venta");
+//                String productos = rs.getString("productos");
+//                double totalVenta = rs.getDouble("total_venta");
+//                Date fecha = rs.getDate("fecha");
+//                List<Integer> listaProductos = Arrays.stream(productos.split(",\\s*"))
+//                        .map(Integer::parseInt)
+//                        .collect(Collectors.toList());
+//                List<Producto> productosLista = new ArrayList<>();
+//                ProductoDAO productoDAO = new ProductoDAO();
+//                for (Integer idProductos: listaProductos){
+//                    Producto producto = productoDAO.get(idProductos);
+//                    if (producto != null){
+//                        productosLista.add(producto);
+//                    }
+//                }
+//                venta = new Venta(id,productosLista,totalVenta,fecha);
+//            }
+//        }finally {
+//            try {
+//                if (rs != null) {
+//                    close(rs);
+//                    close(stmt);
+//                }
+//                if (this.conexionTransaccional == null){
+//                    close(conn);
+//                }
+//
+//            } catch (SQLException e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//        return venta;
+//    }
 }

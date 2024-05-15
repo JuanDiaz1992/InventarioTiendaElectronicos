@@ -15,18 +15,17 @@ public class Producto {
         this.stock = stock;
     }
 
-    public Producto(int idProducto) {
-        this.idProducto = idProducto;
-    }
-
     public Producto(String nombre, String descripcion ,int precio,int stock) {
         this.stock = stock;
         this.precio = precio;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-
     public Producto() {}
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
 
     public int getIdProducto() {
         return idProducto;
@@ -72,7 +71,7 @@ public class Producto {
         sb.append(", ").append(nombreRecortado);
         String textoAcortado =  descripcion.length() > 12 ? descripcion.substring(0, 12) + "..." : descripcion;
         sb.append(", ").append(textoAcortado);
-        sb.append(", ").append(precio);
+        sb.append(", $").append(precio);
         sb.append(", ").append(stock);
         return sb.toString();
     }

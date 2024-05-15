@@ -1,8 +1,11 @@
 package com.tienda.services;
 
-import com.tienda.datos.ProductoDAO;
+import com.tienda.datos.CartDAO;
+import com.tienda.datos.UsuarioDAO;
+import com.tienda.models.Cart;
 import com.tienda.models.Producto;
-
+import com.tienda.models.Usuario;
+import com.tienda.utils.EncryptPassword;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,12 +13,11 @@ import java.util.List;
 
 import static com.tienda.datos.conections.SqlLite.getConection;
 
-public class ProductsServices {
+public class CartServices {
 
-    static ProductoDAO productoDAO = new ProductoDAO();
+    static CartDAO cartDAO = new CartDAO();
 
-
-    public static int createProductService (Producto producto){
+    public static int insertToCart (Cart cart){
         Connection conexion = null;
         int result = 0;
         try {
@@ -23,9 +25,8 @@ public class ProductsServices {
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            result = productoDAO.insert(producto);
+            cartDAO.insert(cart);
             conexion.commit();
-            System.out.println("Producto "+producto.getNombre()+" creado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -38,17 +39,17 @@ public class ProductsServices {
         return result;
     }
 
-    public static int updateProductService(Producto producto){
+    public static List<Cart> getCart(Usuario usuario){
         Connection conexion = null;
         int result = 0;
+        List<Cart> carts = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            result = productoDAO.update(producto);
+            carts = cartDAO.get(usuario);
             conexion.commit();
-            System.out.println("Producto "+producto.getNombre()+" modificado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -58,18 +59,18 @@ public class ProductsServices {
                 ex.printStackTrace(System.out);
             }
         }
-        return result;
+        return carts;
     }
 
-    public static Producto getProduct(String nombre){
+    public static Cart getCart(Producto producto){
         Connection conexion = null;
-        Producto producto = null;
+        Cart cart = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            producto = productoDAO.getFromName(nombre);
+            cart = cartDAO.get(producto);
             conexion.commit();
         } catch (SQLException e) {
             e.printStackTrace(System.out);
@@ -80,63 +81,40 @@ public class ProductsServices {
                 ex.printStackTrace(System.out);
             }
         }
-        return producto;
+        return cart;
     }
 
-    public static Producto getProduct(int id){
-        Connection conexion = null;
-        Producto producto = null;
-        try {
-            conexion = getConection();
-            if (conexion.getAutoCommit()){
-                conexion.setAutoCommit(false);
-            }
-            producto = productoDAO.get(id);
-            conexion.commit();
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
-            System.out.println("Entramos al rollback");
-            try {
-                conexion.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return producto;
-    }
-
-    public static List<Producto> getAllProducts(){
-        Connection conexion = null;
-        List <Producto> productos = null;
-        try {
-            conexion = getConection();
-            if (conexion.getAutoCommit()){
-                conexion.setAutoCommit(false);
-            }
-            productos = productoDAO.select();
-            conexion.commit();
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
-            System.out.println("Entramos al rollback");
-            try {
-                conexion.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
-        }
-        return productos;
-    }
-
-    public static void delteteProduct(Producto producto){
+    public static Cart update(Cart cart){
         Connection conexion = null;
         try {
             conexion = getConection();
             if (conexion.getAutoCommit()){
                 conexion.setAutoCommit(false);
             }
-            productoDAO.delete(producto);
+            cartDAO.update(cart);
             conexion.commit();
-            System.out.println("Producto "+producto.getNombre()+" eliminado correctamente");
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+        return cart;
+    }
+
+    public static void delete(Cart cart){
+        Connection conexion = null;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            cartDAO.delete(cart);
+            conexion.commit();
+            System.out.println("Elemento eliminado correctamente");
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             System.out.println("Entramos al rollback");
@@ -147,5 +125,26 @@ public class ProductsServices {
             }
         }
     }
+
+    public static void delteCart(Usuario usuario){
+        Connection conexion = null;
+        try {
+            conexion = getConection();
+            if (conexion.getAutoCommit()){
+                conexion.setAutoCommit(false);
+            }
+            cartDAO.delete(usuario);
+            conexion.commit();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Entramos al rollback");
+            try {
+                conexion.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            }
+        }
+    }
+
 
 }
