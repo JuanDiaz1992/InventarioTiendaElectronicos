@@ -24,10 +24,12 @@ public class CartController {
                 System.out.print("Ingrese el id del producto: ");
                 int id = Integer.parseInt(scanner.nextLine());
                 producto = ProductsServices.getProduct(id);
-
                 if (producto == null){
                     System.out.println("Producto no existe, intentelo de nuevo.");
-                }else {
+                } else if (producto.getStock() == 0) {
+                    System.out.println("No hay Stock de este producto");
+                }
+                else {
                     Cart cart = CartServices.getCart(producto);
                     if (cart != null){
                         System.out.println("El elemento ya se encuentra en el carrito");
@@ -56,7 +58,7 @@ public class CartController {
                 }
             }
             while (producto == null);
-            if (!existProductInCart){
+            if (!existProductInCart && producto.getStock() > 0){
                 System.out.println("Producto: "+ producto.getNombre() + ", Cantidad: "+producto.getStock()+", Precio: "+ producto.getPrecio());
                 boolean isValid = true;
                 int cantidad=0;
@@ -76,7 +78,6 @@ public class CartController {
                 CartServices.insertToCart(cart);
                 System.out.println("Se agregó correctamente.");
             }
-
         }catch (Exception e){
             e.printStackTrace(System.out);
             System.out.println("Ingrese un valor valido, intentelo de nuevo.");

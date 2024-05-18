@@ -5,35 +5,44 @@ import java.util.List;
 
 public class Venta {
     private int idVenta;
-    private double totalVenta;
+    private int totalVenta;
     private String fecha;
+    private int idUsuario;
+    private String numFactura;
 
-    public Venta(int idVenta, double totalVenta, String fecha) {
+    public Venta(int idVenta, int totalVenta, String fecha, int idUsuario, String numFactura) {
         this.idVenta = idVenta;
         this.totalVenta = totalVenta;
         this.fecha = fecha;
+        this.idUsuario = idUsuario;
+        this.numFactura = numFactura;
+
     }
 
-    public Venta(int idVenta) {
-        this.idVenta = idVenta;
-    }
-
-    public Venta(String fecha, double totalVenta) {
-        this.fecha = fecha;
+    public Venta(int totalVenta, String fecha, int idUsuario, String numFactura) {
         this.totalVenta = totalVenta;
+        this.fecha = fecha;
+        this.idUsuario = idUsuario;
+        this.numFactura = numFactura;
+
     }
 
-    public Venta() {}
+    public Venta() {
+    }
 
     public int getIdVenta() {
         return idVenta;
     }
 
-    public double getTotalVenta() {
+    public void setIdVenta(int idVenta) {
+        this.idVenta = idVenta;
+    }
+
+    public int getTotalVenta() {
         return totalVenta;
     }
 
-    public void setTotalVenta(double totalVenta) {
+    public void setTotalVenta(int totalVenta) {
         this.totalVenta = totalVenta;
     }
 
@@ -45,13 +54,20 @@ public class Venta {
         this.fecha = fecha;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Venta{");
-        sb.append("idVenta=").append(idVenta);
-        sb.append(", totalVenta=").append(totalVenta);
-        sb.append(", fecha=").append(fecha);
-        sb.append('}');
-        return sb.toString();
+    public int getIdUsuario() {
+        return idUsuario;
     }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNumFactura() {
+        return numFactura;
+    }
+
+    public void setNumFactura(String numFactura) {
+        this.numFactura = numFactura;
+    }
+
 }

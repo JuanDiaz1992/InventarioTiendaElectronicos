@@ -2,6 +2,7 @@ package com.tienda.views.subMenus;
 
 import com.tienda.controllers.CartController;
 import com.tienda.controllers.ProductosController;
+import com.tienda.controllers.VentaController;
 import com.tienda.models.Usuario;
 import com.tienda.services.CartServices;
 import com.tienda.utils.PressEnter;
@@ -36,6 +37,10 @@ public class MenuVentas {
                     break;
                 case "3":
                     CartController.deleteCart(usuario);
+                    PressEnter.pressEnter();
+                    break;
+                case "4":
+                    VentaController.makeSale(usuario);
                     PressEnter.pressEnter();
                     break;
             }
