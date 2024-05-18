@@ -5,6 +5,7 @@ import com.tienda.services.CartServices;
 import com.tienda.services.DetalleVentaService;
 import com.tienda.services.ProductsServices;
 import com.tienda.services.VentasServices;
+import com.tienda.utils.DateManipulator;
 
 
 import java.text.SimpleDateFormat;
@@ -27,7 +28,7 @@ public class VentaController {
                 if (!carts.isEmpty()){
                     List<DetalleVenta> detalleVentas = new ArrayList<>();
                     AtomicInteger total = new AtomicInteger();
-                    String currentDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                    String currentDate = DateManipulator.actuallityDay();
                     String factura = VentaController.generateInvoiceNumber();
                     carts.forEach(cart-> {
                         total.addAndGet(cart.getTotalProducto());
@@ -59,7 +60,7 @@ public class VentaController {
     public static String generateInvoiceNumber() {
         String PREFIX = "FACT-";
         int randomNumber = (int) (Math.random() * (999 - 100 + 1)) + 100;
-        String currentDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String currentDate = DateManipulator.actuallityDay();
         String invoiceNumber = PREFIX + currentDate + randomNumber;
 
         return invoiceNumber;
