@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SqlLite {
-    private static final String JDBC_URL = "jdbc:sqlite:InventariosTienda/bdSqlLite.db";
+    private static final String JDBC_URL = "jdbc:sqlite:bdSqlLite.db";
 
     public static DataSource getDataSource(){
         BasicDataSource ds = new BasicDataSource();
