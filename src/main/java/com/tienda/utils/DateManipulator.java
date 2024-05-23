@@ -1,5 +1,7 @@
 package com.tienda.utils;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Pattern;
 import java.text.SimpleDateFormat;
@@ -25,5 +27,13 @@ public class DateManipulator {
     public static String actuallityDay(){
         String currentDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
         return  currentDate;
+    }
+
+    public static String reformat(String dateToFormat){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate date = LocalDate.parse(dateToFormat,dateTimeFormatter);
+
+        DateTimeFormatter outFormarte = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        return date.format(outFormarte);
     }
 }

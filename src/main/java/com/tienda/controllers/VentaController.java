@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class VentaController {
     private static Scanner scanner = new Scanner(System.in);
+    private static DetalleVentaService detalleVentaService = new DetalleVentaService();
 
     public static void makeSale(Usuario usuario){
         try {
@@ -39,12 +40,12 @@ public class VentaController {
                         int cantidad = producto.getStock() - cart.getCantidadProducto();
                         producto.setStock(cantidad);
                         ProductsServices.updateProductService(producto);
-                        DetalleVenta detalleVenta = new DetalleVenta(factura,producto.getIdProducto(),cantidad,producto.getPrecio(),cart.getTotalProducto());
+                        DetalleVenta detalleVenta = new DetalleVenta(factura,producto.getIdProducto(),cart.getCantidadProducto(),producto.getPrecio(),cart.getTotalProducto());
                         detalleVentas.add(detalleVenta);
                     });
                     CartServices.delteCart(usuario);
                     VentasServices.createSale(venta);
-                    DetalleVentaService.createSale(detalleVentas);
+                    detalleVentaService.createSale(detalleVentas);
                     System.out.println("Venta registrada, numero de factura: "+ factura);
                 }else {
                     System.out.println("El carrito se encuentra vacío");

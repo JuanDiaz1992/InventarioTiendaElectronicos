@@ -70,4 +70,14 @@ public class Venta {
         this.numFactura = numFactura;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(idVenta);
+        sb.append(", ").append(totalVenta);
+        sb.append(", ").append(fecha);
+        sb.append(", ").append(idUsuario);
+        sb.append(", ").append(numFactura);
+        return sb.toString();
+    }
 }

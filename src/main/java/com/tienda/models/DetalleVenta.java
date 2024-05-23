@@ -75,4 +75,16 @@ public class DetalleVenta {
     public void setImporte(int importe) {
         this.importe = importe;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(IdDetalleVenta);
+        sb.append(", ").append(idProducto);
+        sb.append(", ").append(cantidadProducto);
+        sb.append(", ").append(precio);
+        sb.append(", ").append(importe);
+        sb.append(", ").append(factura);
+        return sb.toString();
+    }
 }

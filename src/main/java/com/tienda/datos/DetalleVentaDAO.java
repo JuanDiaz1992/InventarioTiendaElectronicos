@@ -18,8 +18,13 @@ public class DetalleVentaDAO implements ICRUD<DetalleVenta>{
     private static final String SQL_INSERT = "INSERT INTO detalle_venta (factura, id_producto,  cantidad_producto, precio, importe) VALUES(?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE detalle_venta SET factura=?, id_producto=?, cantidad_producto=?, precio =?, importe =? WHERE id_venta = ?";
     private static final String SQL_DELETE = "DELETE FROM detalle_venta WHERE id_venta = ?";
-    private static final String SQL_SELECTFORID = "SELECT id_detalle_venta,factura, id_producto,  cantidad_producto, precio, importe FROM detalle_venta WHERE id_venta = ?";
-    private static final String SQL_SELECTFORFACT = "SELECT id_detalle_venta,factura, id_producto,  cantidad_producto, precio, importe FROM detalle_venta WHERE num_factura = ?";
+    private static final String SQL_SELECTFORID = "SELECT id_detalle_venta,factura, id_producto,  cantidad_producto, precio, importe FROM detalle_venta WHERE id_detalle_venta = ?";
+    private static final String SQL_SELECTFORFACT = "SELECT id_detalle_venta,factura, id_producto,  cantidad_producto, precio, importe FROM detalle_venta WHERE factura = ?";
+    private static final String SQL_SELECTFORIDVENTA = "SELECT id_detalle_venta,factura, id_producto,  cantidad_producto, precio, importe " +
+                                                        "FROM detalle_venta " +
+                                                        "JOIN venta " +
+                                                        "ON venta.num_factura = detalle_venta.factura " +
+                                                        "WHERE venta.id_venta = ?";
 
     private Connection conexionTransaccional;
     public DetalleVentaDAO(){}
@@ -148,6 +153,7 @@ public class DetalleVentaDAO implements ICRUD<DetalleVenta>{
         ResultSet rs = null;
         DetalleVenta detalleVenta = null;
         try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
             stmt = conn.prepareStatement(SQL_SELECTFORID);
             stmt.setInt(1, idVenta);
             rs = stmt.executeQuery();
@@ -177,16 +183,18 @@ public class DetalleVentaDAO implements ICRUD<DetalleVenta>{
         return detalleVenta;
     }
 
-    public DetalleVenta get(String facturaVenta) throws SQLException {
+    public List<DetalleVenta> get(String facturaVenta) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        List<DetalleVenta> detalleVentas = new ArrayList<>();
         DetalleVenta detalleVenta = null;
         try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
             stmt = conn.prepareStatement(SQL_SELECTFORFACT);
             stmt.setString(1, facturaVenta);
             rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 int idDetalleVenta = rs.getInt("id_detalle_venta");
                 String factura = rs.getString("factura");
                 int idProducto = rs.getInt("id_producto");
@@ -194,6 +202,7 @@ public class DetalleVentaDAO implements ICRUD<DetalleVenta>{
                 int precio = rs.getInt("precio");
                 int importe = rs.getInt("importe");
                 detalleVenta = new DetalleVenta(idDetalleVenta,factura,idProducto,cantidadProducto,precio,importe);
+                detalleVentas.add(detalleVenta);
             }
         }finally {
             try {
@@ -209,6 +218,44 @@ public class DetalleVentaDAO implements ICRUD<DetalleVenta>{
                 e.printStackTrace(System.out);
             }
         }
-        return detalleVenta;
+        return detalleVentas;
+    }
+
+    public List<DetalleVenta> getListForID(String idVenta) throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<DetalleVenta> detalleVentas = new ArrayList<>();
+        DetalleVenta detalleVenta = null;
+        try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+            stmt = conn.prepareStatement(SQL_SELECTFORIDVENTA);
+            stmt.setString(1, idVenta);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int idDetalleVenta = rs.getInt("id_detalle_venta");
+                String factura = rs.getString("factura");
+                int idProducto = rs.getInt("id_producto");
+                int cantidadProducto = rs.getInt("cantidad_producto");
+                int precio = rs.getInt("precio");
+                int importe = rs.getInt("importe");
+                detalleVenta = new DetalleVenta(idDetalleVenta,factura,idProducto,cantidadProducto,precio,importe);
+                detalleVentas.add(detalleVenta);
+            }
+        }finally {
+            try {
+                if (rs != null) {
+                    close(rs);
+                    close(stmt);
+                }
+                if (this.conexionTransaccional == null){
+                    close(conn);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return detalleVentas;
     }
 }

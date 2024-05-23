@@ -1,5 +1,6 @@
 package com.tienda.datos;
 import com.tienda.models.Venta;
+import com.tienda.utils.DateManipulator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +20,8 @@ public class VentaDAO implements ICRUD<Venta> {
     private static final String SQL_DELETE = "DELETE FROM venta WHERE id_venta = ?";
     private static final String SQL_SELECTFORID = "SELECT id_venta,total_venta, date,  usuario, num_factura FROM venta WHERE id_venta = ?";
     private static final String SQL_SELECTFORFACT = "SELECT id_venta,total_venta, date,  usuario, num_factura FROM venta WHERE num_factura = ?";
+    private static final String SQL_SELECTFORDATE = "SELECT id_venta,total_venta, date,  usuario, num_factura FROM venta WHERE date LIKE ?";
+
 
     private Connection conexionTransaccional;
     public VentaDAO(){}
@@ -144,6 +147,7 @@ public class VentaDAO implements ICRUD<Venta> {
         ResultSet rs = null;
         Venta venta = null;
         try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
             stmt = conn.prepareStatement(SQL_SELECTFORID);
             stmt.setInt(1, idVenta);
             rs = stmt.executeQuery();
@@ -177,6 +181,7 @@ public class VentaDAO implements ICRUD<Venta> {
         ResultSet rs = null;
         Venta venta = null;
         try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
             stmt = conn.prepareStatement(SQL_SELECTFORFACT);
             stmt.setString(1, factura);
             rs = stmt.executeQuery();
@@ -204,4 +209,46 @@ public class VentaDAO implements ICRUD<Venta> {
         }
         return venta;
     }
+
+    public List<Venta> getForDate(String dateSearch) throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Venta venta = null;
+        List<Venta> ventas = new ArrayList<>();
+        try {
+            conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConection();
+            stmt = conn.prepareStatement(SQL_SELECTFORDATE);
+            stmt.setString(1, dateSearch);
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                int idVenta = rs.getInt("id_venta");
+                String date = rs.getString("date");
+                int totalVenta = rs.getInt("total_venta");
+                int vendedor = rs.getInt("usuario");
+                String numFactura = rs.getString("num_factura");
+                venta = new Venta(idVenta,totalVenta, date, vendedor, numFactura );
+                String dateFormat = DateManipulator.reformat(venta.getFecha());
+                venta.setFecha(dateFormat);
+                ventas.add(venta);
+            }
+        }finally {
+            try {
+                if (rs != null) {
+                    close(rs);
+                    close(stmt);
+                }
+                if (this.conexionTransaccional == null){
+                    if (rs != null) {
+                        close(conn);
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+        return ventas;
+    }
+
 }
