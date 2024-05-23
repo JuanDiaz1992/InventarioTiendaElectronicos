@@ -9,17 +9,12 @@ import com.tienda.views.MenuAdmin;
 import com.tienda.views.MenuGerente;
 import com.tienda.views.MenuVendedor;
 
+import java.util.Random;
 import java.util.Scanner;
 
 
 public class Index {
     public static void main(String[] args){
-
-        //Usuario usuarioNew = new Usuario("admin","123456789",1);
-        //UserServices.createUserService(usuarioNew);
-        //Descomente las anteriores lineas solo para crear el usuario Admin en la base de datos
-
-
 
         Scanner scanner = new Scanner(System.in);
         String option;
