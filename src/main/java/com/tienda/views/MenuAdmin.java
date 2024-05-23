@@ -5,6 +5,7 @@ import com.tienda.controllers.UsersController;
 import com.tienda.models.Producto;
 import com.tienda.models.Usuario;
 import com.tienda.utils.PressEnter;
+import com.tienda.views.subMenus.MenuInformes;
 
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class MenuAdmin {
         do {
             System.out.println("Menú principal");
             System.out.println("1) Gestionar Productos");
-            System.out.println("2) Reportes de ventas e inventarios");
+            System.out.println("2) Reportes de ventas");
             System.out.println("3) Gestionar usuario");
             System.out.println("0) Cerrar sesión");
             System.out.print("Elija una opción: ");
@@ -55,6 +56,9 @@ public class MenuAdmin {
                         }
 
                     }while (!optionProduct.equals("0"));
+                    break;
+                case "2":
+                    MenuInformes.menu();
                     break;
                 case "3":
                     String optinUser;

@@ -1,6 +1,5 @@
 package com.tienda.controllers;
 
-import com.tienda.datos.SalesRatingDAO;
 import com.tienda.models.DetalleVenta;
 import com.tienda.models.SalesRating;
 import com.tienda.models.Venta;
@@ -23,18 +22,21 @@ public class InformesController {
     public static void viewInform(String date){
         List<Venta> ventas = informesServices.viewSales(date);
         AtomicInteger totalVentas = new AtomicInteger();
+        AtomicInteger counter = new AtomicInteger();
         if (!ventas.isEmpty()) {
             CreateTable.printHeader("Id", "Valor Venta", "Fecha", "ID Usuario", "Numero Factura");
             ventas.forEach(venta -> {
+                counter.addAndGet(1);
                 CreateTable.printValue(venta);
                 totalVentas.addAndGet(venta.getTotalVenta());
             });
             System.out.println("///////////////");
-            System.out.println("Total ventas: "+totalVentas);
+            System.out.println("Cantidad de ventas: "+counter);
+            System.out.println("Total ventas: $"+totalVentas);
             System.out.println("///////////////");
             System.out.println();
         }else {
-            System.out.println("No hay ventas en la fecha ingresada.");
+            System.out.println("No hay ventas registradas.");
         }
 
     }
